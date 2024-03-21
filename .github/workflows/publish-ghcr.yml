@@ -17,14 +17,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Docker metadata action
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: kbdharun/tldr-lint
-          tags: |
-            type=semver,pattern={{version}}
-
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -32,10 +24,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract Dockerfile labels
+        id: extract_labels
+        run: |
+          LABELS=$(docker inspect --format='{{json .Config.Labels}}' Dockerfile | jq -c 'to_entries[] | .key + "=" + .value')
+          echo "::set-output name=labels::$LABELS"
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          push: ${{ github.event_name }}
+          tags: ghcr.io/${{ github.actor }}/${{ github.repository }}:${{ github.ref_name }}
+          labels: ${{ steps.extract_labels.outputs.labels }}
