@@ -21,7 +21,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: tldr-pages/tldr-lint
+          images: kbdharun/tldr-lint
           tags: |
             type=semver,pattern={{version}}
 
