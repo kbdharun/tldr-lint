@@ -24,17 +24,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: |
-            ghcr.io/${{ github.actor }}/tldr-lint:latest
-            ghcr.io/${{ github.actor }}/tldr-lint:${{ github.ref_name }}
-          labels: |
-            org.opencontainers.image.title="tldr-lint"
-            org.opencontainers.image.description="This image contains the latest version \
-            of the tldr-lint package preinstalled."
-            org.opencontainers.image.source="https://github.com/tldr-pages/tldr-lint"
-            org.opencontainers.image.authors="tldr-pages maintainers and contributors"
-            org.opencontainers.image.vendor="tldr.sh"
-            org.opencontainers.image.licenses="MIT"
+        run: |
+         docker build . --tag ghcr.io/${{ github.actor }}/tldr-lint:latest ghcr.io/${{ github.actor }}/tldr-lint:${{ github.ref_name }}
+         docker push ghcr.io/${{ github.actor }}/tldr-lint:latest ghcr.io/${{ github.actor }}/tldr-lint:${{ github.ref_name }}
