@@ -37,6 +37,6 @@ jobs:
         with:
           push: true
           tags: |
-            - tldr-lint:latest
-            - tldr-lint:${{ github.ref_name }}
+            tldr-lint:latest
+            tldr-lint:${{ github.ref_name }}
           labels: ${{ steps.meta.outputs.labels }}
