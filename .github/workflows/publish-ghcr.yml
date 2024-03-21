@@ -32,15 +32,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Dockerfile labels
-        id: extract_labels
-        run: |
-          LABELS=$(docker inspect --format='{{json .Config.Labels}}' Dockerfile | jq -c 'to_entries[] | .key + "=" + .value')
-          echo "::set-output name=labels::$LABELS"
-
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            - tldr-lint:latest
+            - tldr-lint:${{ github.ref_name }}
           labels: ${{ steps.meta.outputs.labels }}
