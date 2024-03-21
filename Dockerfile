@@ -1,5 +1,5 @@
 # Use LTS version of node as base
-FROM node:lts-alpine AS build
+FROM node AS build
 
 # Image metadata
 LABEL org.opencontainers.image.title "tldr-lint Image"
